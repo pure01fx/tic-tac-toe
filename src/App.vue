@@ -15,10 +15,25 @@
             content-style="padding: 24px;"
             content-class="center-content"
           >
-            <PuzzleComponent />
+            <PuzzleComponent
+              :board="machine.puzzle.value"
+              @click="machine.onCellClick"
+            />
           </n-layout-content>
           <n-layout-sider content-style="padding: 24px;">
-            海淀桥
+            <p>
+              设置
+              <n-flex vertical>
+                <n-flex>
+                  <span>下一颗：</span
+                  ><n-switch>
+                    <template #checked> 就让电脑下棋 </template>
+                    <template #unchecked> 不让电脑下棋 </template>
+                  </n-switch>
+                </n-flex>
+              </n-flex>
+            </p>
+            <p>状态：</p>
           </n-layout-sider>
         </n-layout>
       </n-layout>
@@ -27,8 +42,19 @@
 </template>
 
 <script setup lang="ts">
-import { NLayout, NLayoutHeader, NLayoutSider, NLayoutContent } from 'naive-ui'
+import {
+  NLayout,
+  NLayoutHeader,
+  NLayoutSider,
+  NLayoutContent,
+  NFlex,
+  NSwitch,
+} from 'naive-ui'
 import PuzzleComponent from './components/PuzzleComponent.vue'
+
+import { createMachine } from './logic'
+
+const machine = createMachine()
 </script>
 
 <style>

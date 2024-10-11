@@ -1,6 +1,6 @@
 <template>
   <n-flex vertical :size="0">
-    <n-flex :size="0" v-for="(row, rowIndex) in board" :key="rowIndex">
+    <n-flex :size="0" v-for="(row, rowIndex) in props.board" :key="rowIndex">
       <div
         v-for="(cell, cellIndex) in row"
         :key="cellIndex"
@@ -9,7 +9,7 @@
         <n-button
           quaternary
           circle
-          @click="handleClick(rowIndex, cellIndex)"
+          @click="emit('click', rowIndex, cellIndex)"
           size="large"
         >
           <template #icon>
@@ -37,13 +37,12 @@ import {
   Dismiss12Regular as XIcon,
   Circle12Regular as OIcon,
 } from '@vicons/fluent'
-import { ref } from 'vue'
 
-const board = ref<Array<Array<string | null>>>([
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-])
+const props = defineProps<{ board: Array<Array<string | null>> }>()
+
+const emit = defineEmits<{
+  (event: 'click', rowIndex: number, cellIndex: number): void
+}>()
 
 const getStyle = (rowIndex: number, cellIndex: number) => {
   const style = {
@@ -62,11 +61,6 @@ const getStyle = (rowIndex: number, cellIndex: number) => {
     padding: '10px',
   }
   return style
-}
-
-const handleClick = (rowIndex: number, cellIndex: number) => {
-  const player = board.value[rowIndex][cellIndex] === 'X' ? 'O' : 'X'
-  board.value[rowIndex][cellIndex] = player
 }
 </script>
 
