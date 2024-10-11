@@ -10,13 +10,16 @@ function createPuzzle(): Ref<Array<Array<string | null>>> {
 
 export function createMachine() {
   const puzzle = createPuzzle()
+  const nextPlayer = ref<'X' | 'O'>('X')
 
   const onCellClick = (row: number, col: number) => {
-    puzzle.value[row][col] = Math.random() > 0.5 ? 'X' : 'O'
+    puzzle.value[row][col] = nextPlayer.value
+    nextPlayer.value = nextPlayer.value === 'X' ? 'O' : 'X'
   }
 
   return {
     puzzle,
+    nextPlayer,
     onCellClick,
   }
 }

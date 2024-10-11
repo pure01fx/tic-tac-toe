@@ -33,7 +33,10 @@
                 </n-flex>
               </n-flex>
             </p>
-            <p>状态：</p>
+            <p>
+              状态：<br />
+              下一颗：{{ machine.nextPlayer.value }}<br />
+            </p>
           </n-layout-sider>
         </n-layout>
       </n-layout>
