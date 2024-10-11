@@ -41,6 +41,7 @@ import {
   Circle12Regular as OIcon,
 } from '@vicons/fluent'
 import { computed } from 'vue'
+import { hasSpace } from '@/logic'
 
 const props = defineProps<{ board: Array<Array<string | null>> }>()
 
@@ -69,9 +70,14 @@ const getStyle = (rowIndex: number, cellIndex: number) => {
 
 const colors = computed(() => {
   // if someone has won, highlight the winning line (use "primary" color)
+  const hasSpaceVal = hasSpace(props.board)
   const colors: Array<Array<ButtonTypeType>> = Array.from({ length: 3 }, () =>
-    Array.from({ length: 3 }, () => 'default'),
+    Array.from({ length: 3 }, () => (hasSpaceVal ? 'default' : 'info')),
   )
+
+  if (!hasSpaceVal) {
+    return { colors, hasWinner: false }
+  }
 
   // check rows
   for (let i = 0; i < 3; i++) {

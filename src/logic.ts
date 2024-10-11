@@ -8,7 +8,7 @@ function createPuzzle(): Ref<Array<Array<string | null>>> {
   ])
 }
 
-export function hasWinner(puzzle: Array<Array<string | null>>): boolean {
+function hasWinner(puzzle: Array<Array<string | null>>): boolean {
   // Check rows
   for (let i = 0; i < 3; i++) {
     if (
@@ -50,6 +50,17 @@ export function hasWinner(puzzle: Array<Array<string | null>>): boolean {
   return false
 }
 
+export function hasSpace(puzzle: Array<Array<string | null>>): boolean {
+  for (const row of puzzle) {
+    for (const cell of row) {
+      if (cell === null) {
+        return true
+      }
+    }
+  }
+  return false
+}
+
 export function createMachine() {
   const puzzle = createPuzzle()
   const nextPlayer = ref<'X' | 'O'>('X')
@@ -74,8 +85,10 @@ export function createMachine() {
     onCellClick,
     reset,
     hasWinner: computed(() => {
-      console.log('hasWinner')
       return hasWinner(puzzle.value)
+    }),
+    hasSpace: computed(() => {
+      return hasSpace(puzzle.value)
     }),
   })
 }

@@ -81,7 +81,7 @@ import { computed } from 'vue'
 const machine = createMachine()
 
 const resetButtonType = computed<ButtonTypeType>(() => {
-  return machine.hasWinner ? 'primary' : 'default'
+  return machine.hasWinner || !machine.hasSpace ? 'primary' : 'default'
 })
 </script>
 
