@@ -11,6 +11,8 @@
           circle
           @click="emit('click', rowIndex, cellIndex)"
           size="large"
+          :disabled="cell !== null || colors.hasWinner"
+          :type="colors.colors[rowIndex][cellIndex]"
         >
           <template #icon>
             <n-icon>
@@ -33,10 +35,12 @@
 
 <script setup lang="ts">
 import { NFlex, NButton, NIcon } from 'naive-ui'
+import type { Type } from 'naive-ui/es/button/src/interface'
 import {
   Dismiss12Regular as XIcon,
   Circle12Regular as OIcon,
 } from '@vicons/fluent'
+import { computed } from 'vue'
 
 const props = defineProps<{ board: Array<Array<string | null>> }>()
 
@@ -62,6 +66,59 @@ const getStyle = (rowIndex: number, cellIndex: number) => {
   }
   return style
 }
+
+const colors = computed(() => {
+  // if someone has won, highlight the winning line (use "primary" color)
+  const colors: Array<Array<Type>> = Array.from({ length: 3 }, () =>
+    Array.from({ length: 3 }, () => 'default'),
+  )
+
+  // check rows
+  for (let i = 0; i < 3; i++) {
+    if (
+      props.board[i][0] === props.board[i][1] &&
+      props.board[i][1] === props.board[i][2] &&
+      props.board[i][0] !== null
+    ) {
+      colors[i][0] = colors[i][1] = colors[i][2] = 'primary'
+      return { colors, hasWinner: true }
+    }
+  }
+
+  // check columns
+  for (let i = 0; i < 3; i++) {
+    if (
+      props.board[0][i] === props.board[1][i] &&
+      props.board[1][i] === props.board[2][i] &&
+      props.board[0][i] !== null
+    ) {
+      colors[0][i] = colors[1][i] = colors[2][i] = 'primary'
+      return { colors, hasWinner: true }
+    }
+  }
+
+  // check diagonal from top-left to bottom-right
+  if (
+    props.board[0][0] === props.board[1][1] &&
+    props.board[1][1] === props.board[2][2] &&
+    props.board[0][0] !== null
+  ) {
+    colors[0][0] = colors[1][1] = colors[2][2] = 'primary'
+    return { colors, hasWinner: true }
+  }
+
+  // check diagonal from top-right to bottom-left
+  if (
+    props.board[0][2] === props.board[1][1] &&
+    props.board[1][1] === props.board[2][0] &&
+    props.board[0][2] !== null
+  ) {
+    colors[0][2] = colors[1][1] = colors[2][0] = 'primary'
+    return { colors, hasWinner: true }
+  }
+
+  return { colors, hasWinner: false }
+})
 </script>
 
 <style>

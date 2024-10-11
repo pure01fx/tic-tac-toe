@@ -9,7 +9,11 @@
         class="main-content"
         content-style="display: flex; flex-direction: column;"
       >
-        <n-layout-header>井字棋</n-layout-header>
+        <n-layout-header>
+          <n-flex justify="space-between">
+            <span>井字棋</span><span>qwq</span>
+          </n-flex>
+        </n-layout-header>
         <n-layout has-sider style="align-items: stretch">
           <n-layout-content
             content-style="padding: 24px;"
