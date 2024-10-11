@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { NFlex, NButton, NIcon } from 'naive-ui'
-import type { Type } from 'naive-ui/es/button/src/interface'
+import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import {
   Dismiss12Regular as XIcon,
   Circle12Regular as OIcon,
@@ -69,7 +69,7 @@ const getStyle = (rowIndex: number, cellIndex: number) => {
 
 const colors = computed(() => {
   // if someone has won, highlight the winning line (use "primary" color)
-  const colors: Array<Array<Type>> = Array.from({ length: 3 }, () =>
+  const colors: Array<Array<ButtonTypeType>> = Array.from({ length: 3 }, () =>
     Array.from({ length: 3 }, () => 'default'),
   )
 

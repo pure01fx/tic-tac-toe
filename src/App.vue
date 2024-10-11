@@ -10,8 +10,20 @@
         content-style="display: flex; flex-direction: column;"
       >
         <n-layout-header>
-          <n-flex justify="space-between">
-            <span>井字棋</span><span>qwq</span>
+          <n-flex justify="space-between" align="center">
+            <span>井字棋</span>
+            <n-flex>
+              <n-button
+                strong
+                :type="resetButtonType"
+                round
+                @click="machine.reset()"
+              >
+                <template #icon>
+                  <ResetIcon />
+                </template>
+              </n-button>
+            </n-flex>
           </n-flex>
         </n-layout-header>
         <n-layout has-sider style="align-items: stretch">
@@ -20,7 +32,7 @@
             content-class="center-content"
           >
             <PuzzleComponent
-              :board="machine.puzzle.value"
+              :board="machine.puzzle"
               @click="machine.onCellClick"
             />
           </n-layout-content>
@@ -39,7 +51,8 @@
             </p>
             <p>
               状态：<br />
-              下一颗：{{ machine.nextPlayer.value }}<br />
+              下一颗：{{ machine.nextPlayer }}<br />
+              {{ machine.hasWinner ? '有' : '无' }}胜者
             </p>
           </n-layout-sider>
         </n-layout>
@@ -56,12 +69,20 @@ import {
   NLayoutContent,
   NFlex,
   NSwitch,
+  NButton,
 } from 'naive-ui'
+import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import PuzzleComponent from './components/PuzzleComponent.vue'
+import { ArrowReset32Filled as ResetIcon } from '@vicons/fluent'
 
 import { createMachine } from './logic'
+import { computed } from 'vue'
 
 const machine = createMachine()
+
+const resetButtonType = computed<ButtonTypeType>(() => {
+  return machine.hasWinner ? 'primary' : 'default'
+})
 </script>
 
 <style>
@@ -84,8 +105,8 @@ const machine = createMachine()
 }
 
 .n-layout-header {
-  background: rgba(128, 128, 128, 0.2);
   padding: 24px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
 }
 
 .n-layout-sider {
