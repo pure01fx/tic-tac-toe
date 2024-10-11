@@ -42,7 +42,7 @@
               <n-flex vertical>
                 <n-flex>
                   <span>下一颗：</span
-                  ><n-switch>
+                  ><n-switch v-model:value="machine.enableAI">
                     <template #checked> 就让电脑下棋 </template>
                     <template #unchecked> 不让电脑下棋 </template>
                   </n-switch>
