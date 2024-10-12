@@ -140,9 +140,9 @@ function minimax(
   const winner = findWinner(puzzle)
   if (winner !== null || remainingDepth === 0) {
     if (winner === 'X') {
-      node.score = -10
+      node.score = -remainingDepth
     } else if (winner === 'O') {
-      node.score = 10
+      node.score = remainingDepth
     }
     return node
   }
@@ -164,6 +164,10 @@ function minimax(
         }
       }
     }
+  }
+
+  if (Math.abs(node.score) > 100000) {
+    node.score = 0
   }
 
   return node
