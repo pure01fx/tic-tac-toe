@@ -70,14 +70,9 @@ const getStyle = (rowIndex: number, cellIndex: number) => {
 
 const colors = computed(() => {
   // if someone has won, highlight the winning line (use "primary" color)
-  const hasSpaceVal = hasSpace(props.board)
   const colors: Array<Array<ButtonTypeType>> = Array.from({ length: 3 }, () =>
-    Array.from({ length: 3 }, () => (hasSpaceVal ? 'default' : 'info')),
+    Array.from({ length: 3 }, () => 'default'),
   )
-
-  if (!hasSpaceVal) {
-    return { colors, hasWinner: false }
-  }
 
   // check rows
   for (let i = 0; i < 3; i++) {
@@ -121,6 +116,12 @@ const colors = computed(() => {
   ) {
     colors[0][2] = colors[1][1] = colors[2][0] = 'primary'
     return { colors, hasWinner: true }
+  }
+
+  if (!hasSpace(props.board)) {
+    colors.forEach((row, _rowIndex) => {
+      row.fill('info')
+    })
   }
 
   return { colors, hasWinner: false }
