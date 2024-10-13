@@ -69,14 +69,20 @@ export function createMachine() {
   const winner = computed(() => findWinner(puzzle.value))
   const space = computed(() => hasSpace(puzzle.value))
 
+  const performMove = () => {
+    if (winner.value === null && space.value) {
+      const [aiRow, aiCol] = findBestMove(puzzle.value, 10, nextPlayer.value)
+      puzzle.value[aiRow][aiCol] = nextPlayer.value
+      nextPlayer.value = nextPlayer.value === 'X' ? 'O' : 'X'
+    }
+  }
+
   const onCellClick = (row: number, col: number) => {
     puzzle.value[row][col] = nextPlayer.value
     nextPlayer.value = nextPlayer.value === 'X' ? 'O' : 'X'
 
-    if (winner.value === null && space.value && enableAI.value) {
-      const [aiRow, aiCol] = findBestMove(puzzle.value, 10, nextPlayer.value)
-      puzzle.value[aiRow][aiCol] = nextPlayer.value
-      nextPlayer.value = nextPlayer.value === 'X' ? 'O' : 'X'
+    if (enableAI.value) {
+      performMove()
     }
   }
 
@@ -97,6 +103,7 @@ export function createMachine() {
     hasWinner: computed(() => winner.value !== null),
     hasSpace: space,
     enableAI,
+    performMove,
   })
 }
 

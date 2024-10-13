@@ -15,6 +15,17 @@
             <n-flex>
               <n-button
                 strong
+                type="info"
+                :disabled="!enableAINext"
+                round
+                @click="machine.performMove()"
+              >
+                <template #icon>
+                  <AutoIcon />
+                </template>
+              </n-button>
+              <n-button
+                strong
                 :type="resetButtonType"
                 round
                 @click="machine.reset()"
@@ -73,7 +84,10 @@ import {
 } from 'naive-ui'
 import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import PuzzleComponent from './components/PuzzleComponent.vue'
-import { ArrowReset32Filled as ResetIcon } from '@vicons/fluent'
+import {
+  ArrowReset32Filled as ResetIcon,
+  AnimalDog24Filled as AutoIcon,
+} from '@vicons/fluent'
 
 import { createMachine } from './logic'
 import { computed } from 'vue'
@@ -82,6 +96,10 @@ const machine = createMachine()
 
 const resetButtonType = computed<ButtonTypeType>(() => {
   return machine.hasWinner || !machine.hasSpace ? 'primary' : 'default'
+})
+
+const enableAINext = computed(() => {
+  return machine.hasSpace && !machine.hasWinner
 })
 </script>
 
