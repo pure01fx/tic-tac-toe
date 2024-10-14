@@ -41,9 +41,9 @@ import {
   Circle12Regular as OIcon,
 } from '@vicons/fluent'
 import { computed } from 'vue'
-import { hasSpace } from '@/logic'
+import { hasSpace, type TicTacToeBoard } from '@/logic'
 
-const props = defineProps<{ board: Array<Array<string | null>> }>()
+const props = defineProps<{ board: TicTacToeBoard }>()
 
 const emit = defineEmits<{
   (event: 'click', rowIndex: number, cellIndex: number): void

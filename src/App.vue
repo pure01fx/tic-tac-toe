@@ -16,6 +16,17 @@
               <n-button
                 strong
                 type="info"
+                :disabled="machine.searchTree === null"
+                round
+                @click="showSearchTree = true"
+              >
+                <template #icon>
+                  <TreeIcon />
+                </template>
+              </n-button>
+              <n-button
+                strong
+                type="info"
                 :disabled="!enableAINext"
                 round
                 @click="machine.performMove()"
@@ -69,6 +80,14 @@
         </n-layout>
       </n-layout>
     </div>
+    <n-modal v-model:show="showSearchTree">
+      <search-tree-dialog-card
+        title="搜索树"
+        :show="showSearchTree"
+        :tree="machine.searchTree"
+        @close="showSearchTree = false"
+      />
+    </n-modal>
   </n-layout>
 </template>
 
@@ -81,16 +100,19 @@ import {
   NFlex,
   NSwitch,
   NButton,
+  NModal,
 } from 'naive-ui'
 import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import PuzzleComponent from './components/PuzzleComponent.vue'
+import SearchTreeDialogCard from './components/SearchTreeDialogCard.vue'
 import {
   ArrowReset32Filled as ResetIcon,
   AnimalDog24Filled as AutoIcon,
+  CubeTree24Regular as TreeIcon,
 } from '@vicons/fluent'
 
 import { createMachine } from './logic'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const machine = createMachine()
 
@@ -101,6 +123,8 @@ const resetButtonType = computed<ButtonTypeType>(() => {
 const enableAINext = computed(() => {
   return machine.hasSpace && !machine.hasWinner
 })
+
+const showSearchTree = ref(false)
 </script>
 
 <style>

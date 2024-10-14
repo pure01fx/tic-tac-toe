@@ -1,14 +1,16 @@
 import { computed, reactive, ref, type Ref } from 'vue'
 
-function createPuzzle(): Ref<Array<Array<string | null>>> {
-  return ref<Array<Array<string | null>>>([
+export type TicTacToeBoard = ('X' | 'O' | null)[][]
+
+function createPuzzle(): Ref<TicTacToeBoard> {
+  return ref<TicTacToeBoard>([
     [null, null, null],
     [null, null, null],
     [null, null, null],
   ])
 }
 
-function findWinner(puzzle: Array<Array<string | null>>): string | null {
+function findWinner(puzzle: TicTacToeBoard): string | null {
   // Check rows
   for (let i = 0; i < 3; i++) {
     if (
@@ -50,7 +52,7 @@ function findWinner(puzzle: Array<Array<string | null>>): string | null {
   return null
 }
 
-export function hasSpace(puzzle: Array<Array<string | null>>): boolean {
+export function hasSpace(puzzle: TicTacToeBoard): boolean {
   for (const row of puzzle) {
     for (const cell of row) {
       if (cell === null) {
@@ -68,13 +70,23 @@ export function createMachine() {
 
   const winner = computed(() => findWinner(puzzle.value))
   const space = computed(() => hasSpace(puzzle.value))
+  const searchTree = ref<SearchTreeNode | null>(null)
 
-  const performMove = () => {
+  const performMove = (): SearchTreeNode | null => {
     if (winner.value === null && space.value) {
-      const [aiRow, aiCol] = findBestMove(puzzle.value, 10, nextPlayer.value)
+      const { bestMove, node } = findBestMove(
+        puzzle.value,
+        10,
+        nextPlayer.value,
+      )
+      const [aiRow, aiCol] = bestMove
       puzzle.value[aiRow][aiCol] = nextPlayer.value
       nextPlayer.value = nextPlayer.value === 'X' ? 'O' : 'X'
+
+      return node
     }
+
+    return null
   }
 
   const onCellClick = (row: number, col: number) => {
@@ -82,7 +94,9 @@ export function createMachine() {
     nextPlayer.value = nextPlayer.value === 'X' ? 'O' : 'X'
 
     if (enableAI.value) {
-      performMove()
+      searchTree.value = performMove()
+    } else {
+      searchTree.value = null
     }
   }
 
@@ -103,25 +117,51 @@ export function createMachine() {
     hasWinner: computed(() => winner.value !== null),
     hasSpace: space,
     enableAI,
-    performMove,
+    performMove: () => {
+      searchTree.value = performMove()
+    },
+    searchTree,
   })
 }
 
-function clonePuzzle(
-  puzzle: Array<Array<string | null>>,
-): Array<Array<string | null>> {
+function clonePuzzle(puzzle: TicTacToeBoard): TicTacToeBoard {
   return puzzle.map(row => row.slice())
 }
 
 // implement min-max algorithm, requires to save the tree of the states
-type SearchTreeNode = {
-  puzzle: Array<Array<string | null>>
+export type SearchTreeNode = {
+  puzzle: TicTacToeBoard
   children: Array<SearchTreeNode>
   score: number
   isMaximizing: boolean
 }
 
-function score(puzzle: Array<Array<string | null>>): number {
+export type SearchTreeData = {
+  name: string
+  value: TicTacToeBoard
+  children: Array<SearchTreeData>
+}
+
+export function searchTreeToData(node: SearchTreeNode | null): SearchTreeData {
+  if (node === null) {
+    return {
+      name: 'root',
+      value: [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+      ],
+      children: [],
+    }
+  }
+  return {
+    name: `${node.score} (${node.isMaximizing ? 'max' : 'min'})`,
+    value: node.puzzle,
+    children: node.children.map(searchTreeToData),
+  }
+}
+
+function score(puzzle: TicTacToeBoard): number {
   const winner = findWinner(puzzle)
   if (winner === 'X') {
     return -10
@@ -133,7 +173,7 @@ function score(puzzle: Array<Array<string | null>>): number {
 }
 
 function minimax(
-  puzzle: Array<Array<string | null>>,
+  puzzle: TicTacToeBoard,
   isMaximizing: boolean,
   remainingDepth: number,
 ): SearchTreeNode {
@@ -181,10 +221,10 @@ function minimax(
 }
 
 function findBestMove(
-  puzzle: Array<Array<string | null>>,
+  puzzle: TicTacToeBoard,
   maxDepth: number,
   player: 'X' | 'O',
-): [number, number] {
+): { bestMove: [number, number]; node: SearchTreeNode } {
   const node = minimax(puzzle, player === 'O', maxDepth)
   const bestScore = node.score
   let bestMove: [number, number] = [-1, -1]
@@ -203,5 +243,5 @@ function findBestMove(
     }
   }
 
-  return bestMove
+  return { bestMove, node }
 }
