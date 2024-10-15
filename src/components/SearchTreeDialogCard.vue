@@ -1,7 +1,7 @@
 <template>
   <n-flex>
     <n-card :title="props.title" closable @close="emit('close')" size="huge">
-      <div id="search-tree-div" style="width: 50vw; height: 50vh">
+      <div id="search-tree-div" style="width: 80vw; height: 80vh">
         <!-- Main content goes here -->
       </div>
     </n-card>
