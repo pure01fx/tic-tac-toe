@@ -132,6 +132,7 @@ export function createMachine() {
       [null, null, null],
     ]
     nextPlayer.value = 'X'
+    searchTree.value = null
   }
 
   return reactive({
