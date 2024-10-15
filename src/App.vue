@@ -86,7 +86,6 @@
             <p>
               状态：<br />
               下一颗：{{ machine.nextPlayer }}<br />
-              {{ machine.hasWinner ? '有' : '无' }}胜者<br />
               搜索树节点数量：{{ machine.nodeCount }}
             </p>
           </n-layout-sider>
