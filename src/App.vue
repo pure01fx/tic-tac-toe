@@ -13,38 +13,53 @@
           <n-flex justify="space-between" align="center">
             <span>井字棋</span>
             <n-flex>
-              <n-button
-                strong
-                type="info"
-                :disabled="machine.searchTree === null"
-                round
-                @click="showSearchTree = true"
-              >
-                <template #icon>
-                  <TreeIcon />
+              <n-tooltip trigger="hover" placement="bottom">
+                <template #trigger>
+                  <n-button
+                    strong
+                    type="info"
+                    :disabled="machine.searchTree === null"
+                    round
+                    @click="showSearchTree = true"
+                  >
+                    <template #icon>
+                      <TreeIcon />
+                    </template>
+                  </n-button>
                 </template>
-              </n-button>
-              <n-button
-                strong
-                type="info"
-                :disabled="!enableAINext"
-                round
-                @click="machine.performMove()"
-              >
-                <template #icon>
-                  <AutoIcon />
+                搜索树
+              </n-tooltip>
+              <n-tooltip trigger="hover" placement="bottom">
+                <template #trigger>
+                  <n-button
+                    strong
+                    type="info"
+                    :disabled="!enableAINext"
+                    round
+                    @click="machine.performMove()"
+                  >
+                    <template #icon>
+                      <AutoIcon />
+                    </template>
+                  </n-button>
                 </template>
-              </n-button>
-              <n-button
-                strong
-                :type="resetButtonType"
-                round
-                @click="machine.reset()"
-              >
-                <template #icon>
-                  <ResetIcon />
+                去吧！<del>AI</del>
+              </n-tooltip>
+              <n-tooltip trigger="hover" placement="bottom">
+                <template #trigger>
+                  <n-button
+                    strong
+                    :type="resetButtonType"
+                    round
+                    @click="machine.reset()"
+                  >
+                    <template #icon>
+                      <ResetIcon />
+                    </template>
+                  </n-button>
                 </template>
-              </n-button>
+                重置棋盘
+              </n-tooltip>
             </n-flex>
           </n-flex>
         </n-layout-header>
@@ -115,6 +130,7 @@ import {
   NModal,
   NSelect,
   NInputNumber,
+  NTooltip,
 } from 'naive-ui'
 import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import PuzzleComponent from './components/PuzzleComponent.vue'
