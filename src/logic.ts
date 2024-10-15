@@ -88,6 +88,7 @@ export function createMachine() {
   const nextPlayer = ref<'X' | 'O'>('X')
   const enableAI = ref(false)
   const algorithm = ref(algorithmOptions[0].value as 'min-max')
+  const depth = ref(10)
 
   const winner = computed(() => findWinner(puzzle.value))
   const space = computed(() => hasSpace(puzzle.value))
@@ -95,9 +96,9 @@ export function createMachine() {
 
   const findBestMove = () => {
     if (algorithm.value === 'min-max') {
-      return findBestMoveMinMax(puzzle.value, 10, nextPlayer.value)
+      return findBestMoveMinMax(puzzle.value, depth.value, nextPlayer.value)
     } else {
-      return findBestMoveAlphaBeta(puzzle.value, 10, nextPlayer.value)
+      return findBestMoveAlphaBeta(puzzle.value, depth.value, nextPlayer.value)
     }
   }
 
@@ -154,6 +155,7 @@ export function createMachine() {
       return calcNodeCount(searchTree.value)
     }),
     algorithm,
+    depth,
   })
 }
 

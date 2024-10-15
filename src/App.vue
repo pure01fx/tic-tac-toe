@@ -73,6 +73,14 @@
                   v-model:value="machine.algorithm"
                   :options="algorithmOptions"
                 />
+                <n-input-number
+                  :min="1"
+                  :max="10"
+                  :precision="0"
+                  v-model:value="machine.depth"
+                >
+                  <template #prefix> 最大深度 </template>
+                </n-input-number>
               </n-flex>
             </p>
             <p>
@@ -107,6 +115,7 @@ import {
   NButton,
   NModal,
   NSelect,
+  NInputNumber,
 } from 'naive-ui'
 import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import PuzzleComponent from './components/PuzzleComponent.vue'
