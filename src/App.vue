@@ -69,12 +69,17 @@
                     <template #unchecked> 不让电脑下棋 </template>
                   </n-switch>
                 </n-flex>
+                <n-select
+                  v-model:value="machine.algorithm"
+                  :options="algorithmOptions"
+                />
               </n-flex>
             </p>
             <p>
               状态：<br />
               下一颗：{{ machine.nextPlayer }}<br />
-              {{ machine.hasWinner ? '有' : '无' }}胜者
+              {{ machine.hasWinner ? '有' : '无' }}胜者<br />
+              搜索树节点数量：{{ machine.nodeCount }}
             </p>
           </n-layout-sider>
         </n-layout>
@@ -101,6 +106,7 @@ import {
   NSwitch,
   NButton,
   NModal,
+  NSelect,
 } from 'naive-ui'
 import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import PuzzleComponent from './components/PuzzleComponent.vue'
@@ -111,7 +117,7 @@ import {
   CubeTree24Regular as TreeIcon,
 } from '@vicons/fluent'
 
-import { createMachine } from './logic'
+import { algorithmOptions, createMachine } from './logic'
 import { computed, ref } from 'vue'
 
 const machine = createMachine()
