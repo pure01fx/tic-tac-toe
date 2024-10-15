@@ -64,14 +64,6 @@ export function hasSpace(puzzle: TicTacToeBoard): boolean {
   return false
 }
 
-function calcNodeCount(node: SearchTreeNode): number {
-  let count = 1
-  for (const child of node.children) {
-    count += calcNodeCount(child)
-  }
-  return count
-}
-
 export const algorithmOptions: SelectMixedOption[] = [
   {
     label: 'Min-Max',
@@ -152,7 +144,7 @@ export function createMachine() {
       if (searchTree.value === null) {
         return 0
       }
-      return calcNodeCount(searchTree.value)
+      return searchTree.value.nodeCount
     }),
     algorithm,
     depth,
@@ -169,6 +161,7 @@ export type SearchTreeNode = {
   children: Array<SearchTreeNode>
   score: number
   isMaximizing: boolean
+  nodeCount: number
 }
 
 export type SearchTreeData = {
@@ -206,6 +199,7 @@ function minimax(
     children: [],
     score: isMaximizing ? -Infinity : Infinity,
     isMaximizing,
+    nodeCount: 1,
   }
 
   const winner = findWinner(puzzle)
@@ -227,6 +221,7 @@ function minimax(
         newPuzzle[i][j] = nextPlayer
         const child = minimax(newPuzzle, !isMaximizing, remainingDepth - 1)
         node.children.push(child)
+        node.nodeCount += child.nodeCount
 
         if (isMaximizing) {
           node.score = Math.max(node.score, child.score)
@@ -283,6 +278,7 @@ function alphaBeta(
     children: [],
     score: isMaximizing ? -Infinity : Infinity,
     isMaximizing,
+    nodeCount: 1,
   }
 
   const winner = findWinner(puzzle)
@@ -310,6 +306,7 @@ function alphaBeta(
           beta,
         )
         node.children.push(child)
+        node.nodeCount += child.nodeCount
 
         if (isMaximizing) {
           node.score = Math.max(node.score, child.score)
