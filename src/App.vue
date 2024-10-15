@@ -72,6 +72,16 @@
               :board="machine.puzzle"
               @click="machine.onCellClick"
             />
+            <div class="github-link">
+              <a href="https://github.com/pure01fx/tic-tac-toe">
+                <n-flex align="center">
+                  <n-icon>
+                    <LogoGithub />
+                  </n-icon>
+                  pure01fx/tic-tac-toe
+                </n-flex>
+              </a>
+            </div>
           </n-layout-content>
           <n-layout-sider content-style="padding: 24px;">
             <p>
@@ -131,6 +141,7 @@ import {
   NSelect,
   NInputNumber,
   NTooltip,
+  NIcon,
 } from 'naive-ui'
 import type { Type as ButtonTypeType } from 'naive-ui/es/button/src/interface'
 import PuzzleComponent from './components/PuzzleComponent.vue'
@@ -140,6 +151,7 @@ import {
   AnimalDog24Filled as AutoIcon,
   CubeTree24Regular as TreeIcon,
 } from '@vicons/fluent'
+import { LogoGithub } from '@vicons/ionicons5'
 
 import { algorithmOptions, createMachine } from './logic'
 import { computed, ref } from 'vue'
@@ -183,5 +195,16 @@ const showSearchTree = ref(false)
 
 .n-layout-sider {
   background: rgba(128, 128, 128, 0.3);
+}
+
+.github-link {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.github-link a {
+  color: gray;
 }
 </style>
